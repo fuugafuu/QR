@@ -12,7 +12,15 @@ document.getElementById('uploadForm').addEventListener('submit', async (event) =
       body: formData
     });
 
-    // レスポンスがJSONかどうかを確認
+    // ステータスコードが200でない場合、エラーメッセージを表示
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Error:', errorText);  // エラーログ
+      alert('サーバーエラーが発生しました。');
+      return;
+    }
+
+    // レスポンスがJSONかどうか確認してから処理
     const result = await response.json();
     
     if (result.fileUrl) {
