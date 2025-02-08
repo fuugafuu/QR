@@ -1,8 +1,3 @@
-const formidable = require('formidable'); // ファイルアップロード用
-const { v4: uuidv4 } = require('uuid'); // ユニークID生成
-const fs = require('fs');
-const path = require('path');
-
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'Method Not Allowed' });
@@ -10,7 +5,7 @@ module.exports = async (req, res) => {
   }
 
   const form = new formidable.IncomingForm();
-  form.uploadDir = path.join(__dirname, '../../uploads'); // アップロードディレクトリ
+  form.uploadDir = path.join(__dirname, '../../uploads');
   form.keepExtensions = true;
 
   form.parse(req, (err, fields, files) => {
