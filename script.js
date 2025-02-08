@@ -3,17 +3,24 @@ document.getElementById('uploadForm').addEventListener('submit', async (event) =
   const file = document.getElementById('fileInput').files[0];
   if (!file) return alert("ファイルを選択してください。");
 
-  // ファイルをVercelやクラウドストレージにアップロードしてURLを取得する処理
-  // ここではデモとしてダミーURLを使います。
-  const dummyUrl = "https://example.com/shared/" + encodeURIComponent(file.name);
+  const formData = new FormData();
+  formData.append('file', file);
 
-  // URLを表示
-  document.getElementById('result').innerHTML = `共有URL: <a href="${dummyUrl}" target="_blank">${dummyUrl}</a>`;
+  try {
+    const response = await fetch('/api/upload', {
+      method: 'POST',
+      body: formData
+    });
+    const result = await response.json();
 
-  // QRコードを生成
-  const qrCodeDiv = document.getElementById('qrcode');
-  qrCodeDiv.innerHTML = ""; // 既存のQRコードをクリア
-  QRCode.toCanvas(qrCodeDiv, dummyUrl, { width: 200 }, (error) => {
-    if (error) console.error(error);
-  });
+    if (result.fileUrl) {
+      document.getElementById('result').innerHTML = `共有URL: <a href="${result.fileUrl}" target="_blank">${result.fileUrl}</a>`;
+      QRCode.toCanvas(document.getElementById('qrcode'), result.fileUrl, { width: 200 });
+    } else {
+      alert('アップロードに失敗しました。');
+    }
+  } catch (error) {
+    console.error('エラー:', error);
+    alert('エラーが発生しました。');
+  }
 });
