@@ -12,25 +12,31 @@ document.getElementById('uploadForm').addEventListener('submit', async (event) =
       body: formData
     });
 
-    // ステータスコードが200でない場合、エラーメッセージを表示
+    // サーバーから返されたレスポンスをtext()として一度取得
+    const responseText = await response.text();
+    console.log('サーバーからのレスポンス:', responseText);  // レスポンスが何か確認
+
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Error:', errorText);  // エラーログ
       alert('サーバーエラーが発生しました。');
       return;
     }
 
-    // レスポンスがJSONかどうか確認してから処理
-    const result = await response.json();
-    
-    if (result.fileUrl) {
-      document.getElementById('result').innerHTML = `共有URL: <a href="${result.fileUrl}" target="_blank">${result.fileUrl}</a>`;
-      QRCode.toCanvas(document.getElementById('qrcode'), result.fileUrl, { width: 200 });
-    } else {
-      alert('アップロードに失敗しました。');
+    // レスポンスがJSON形式でない場合にエラー
+    try {
+      const result = JSON.parse(responseText);  // ここでJSONに変換
+      if (result.fileUrl) {
+        document.getElementById('result').innerHTML = `共有URL: <a href="${result.fileUrl}" target="_blank">${result.fileUrl}</a>`;
+        QRCode.toCanvas(document.getElementById('qrcode'), result.fileUrl, { width: 200 });
+      } else {
+        alert('アップロードに失敗しました。');
+      }
+    } catch (error) {
+      console.error('JSONパースエラー:', error);
+      alert('サーバーからのレスポンスが正しいJSON形式ではありません。');
     }
+
   } catch (error) {
-    console.error('エラー:', error);
-    alert('エラーが発生しました。');
+    console.error('通信エラー:', error);
+    alert('通信中にエラーが発生しました。');
   }
 });
