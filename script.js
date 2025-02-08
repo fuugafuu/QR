@@ -1,6 +1,19 @@
-form.parse(req, (err, fields, files) => {
-  if (err) {
-    console.log("エラー発生:", err);  // ここでエラーを確認できる
-    return res.status(500).json({ error: 'ファイルアップロードに失敗しました' });
-  }
+form.addEventListener('submit', function(event) {
+  event.preventDefault();  // フォームが自動的に送信されないようにする
+  
+  const fileInput = document.getElementById('fileInput');
+  const formData = new FormData();
+  formData.append('file', fileInput.files[0]);
+
+  fetch('/api/upload', {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log('アップロード成功:', data);
+  })
+  .catch(error => {
+    console.error('アップロードエラー:', error);
+  });
 });
