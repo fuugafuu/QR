@@ -1,52 +1,27 @@
-document.addEventListener('DOMContentLoaded', function() {
-  const form = document.getElementById('uploadForm');
-  const qrCodeContainer = document.getElementById('qrCodeContainer');
-  const qrCodeImage = document.getElementById('qrCode');
-  const downloadLink = document.getElementById('downloadLink');
+document.getElementById('uploadForm').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  
+  const file = document.getElementById('fileInput').files[0];
+  if (!file) return alert("ファイルを選択してください。");
 
-  form.addEventListener('submit', function(event) {
-    event.preventDefault(); // ページがリロードされないようにする
+  const formData = new FormData();
+  formData.append('file', file);
 
-    const fileInput = document.getElementById('fileInput');
-    const file = fileInput.files[0];
-
-    if (!file) {
-      alert('ファイルを選択してください');
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append('file', file);
-
-    // サーバーにファイルを送信して、アップロードURLを受け取る
-    fetch('/upload', {
+  try {
+    const response = await fetch('/api/upload', {
       method: 'POST',
       body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-      // サーバーからファイルのURLが返ってきたら、そのURLでQRコードを生成
-      if (data.fileUrl) {
-        const fileUrl = data.fileUrl;
-        generateQRCode(fileUrl);
-      }
-    })
-    .catch(error => {
-      console.error('アップロードエラー:', error);
-      alert('アップロードに失敗しました');
     });
-  });
+    const result = await response.json();
 
-  // QRコードを生成する関数
-  function generateQRCode(url) {
-    const qrCode = new QRCode(qrCodeImage, {
-      text: url,
-      width: 128,
-      height: 128
-    });
-
-    qrCodeContainer.style.display = 'block';
-    qrCodeImage.style.display = 'block';
-    downloadLink.href = qrCodeImage.src;  // ダウンロードリンクを設定
+    if (result.fileUrl) {
+      document.getElementById('result').innerHTML = `共有URL: <a href="${result.fileUrl}" target="_blank">${result.fileUrl}</a>`;
+      QRCode.toCanvas(document.getElementById('qrcode'), result.fileUrl, { width: 200 });
+    } else {
+      alert('アップロードに失敗しました。');
+    }
+  } catch (error) {
+    console.error('エラー:', error);
+    alert('エラーが発生しました。');
   }
 });
