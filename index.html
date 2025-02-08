@@ -1,4 +1,25 @@
-<form id="uploadForm" enctype="multipart/form-data">
-  <input type="file" id="fileInput" name="file">
-  <button type="submit">アップロード</button>
-</form>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QRコードファイルアップロード</title>
+</head>
+<body>
+  <h1>ファイルまたは画像をアップロードしてQRコードを生成</h1>
+  
+  <form id="uploadForm" enctype="multipart/form-data">
+    <label for="fileInput">ファイルを選択してください：</label>
+    <input type="file" id="fileInput" name="file">
+    <button type="submit">QRコード生成</button>
+  </form>
+
+  <div id="qrCodeContainer" style="margin-top: 20px;">
+    <p>QRコード：</p>
+    <img id="qrCode" style="display: none;" src="" alt="QRコード">
+    <a id="downloadLink" href="" download>QRコードをダウンロード</a>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
