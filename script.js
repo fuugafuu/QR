@@ -1,4 +1,6 @@
-if (err) {
-  console.error("エラーが発生しました:", err);  // どこでエラーが起きたかがわかる
-  return res.status(500).json({ error: 'サーバーで問題が起きました' });
-}
+form.parse(req, (err, fields, files) => {
+  if (err) {
+    console.log("エラー発生:", err);  // ここでエラーを確認できる
+    return res.status(500).json({ error: 'ファイルアップロードに失敗しました' });
+  }
+});
