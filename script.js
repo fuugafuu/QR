@@ -1,28 +1,19 @@
-document.getElementById('fileInput').addEventListener('change', async (event) => {
-  const file = event.target.files[0];
-  if (!file) return;
+document.getElementById('uploadForm').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const file = document.getElementById('fileInput').files[0];
+  if (!file) return alert("ファイルを選択してください。");
 
-  const reader = new FileReader();
-  reader.onload = async (e) => {
-    const img = new Image();
-    img.src = e.target.result;
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      canvas.width = img.width;
-      canvas.height = img.height;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, img.width, img.height);
+  // ファイルをVercelやクラウドストレージにアップロードしてURLを取得する処理
+  // ここではデモとしてダミーURLを使います。
+  const dummyUrl = "https://example.com/shared/" + encodeURIComponent(file.name);
 
-      const imageData = ctx.getImageData(0, 0, img.width, img.height);
-      const code = jsQR(imageData.data, img.width, img.height, { inversionAttempts: "attemptBoth" });
+  // URLを表示
+  document.getElementById('result').innerHTML = `共有URL: <a href="${dummyUrl}" target="_blank">${dummyUrl}</a>`;
 
-      if (code) {
-        document.getElementById('result').innerHTML = `QRコードの内容: <a href="${code.data}" target="_blank">${code.data}</a>`;
-        window.location.href = code.data;  // 自動でリンクへ移動
-      } else {
-        document.getElementById('result').textContent = 'QRコードが認識できませんでした。別の画像を試してください。';
-      }
-    };
-  };
-  reader.readAsDataURL(file);
+  // QRコードを生成
+  const qrCodeDiv = document.getElementById('qrcode');
+  qrCodeDiv.innerHTML = ""; // 既存のQRコードをクリア
+  QRCode.toCanvas(qrCodeDiv, dummyUrl, { width: 200 }, (error) => {
+    if (error) console.error(error);
+  });
 });
