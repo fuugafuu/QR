@@ -13,3 +13,7 @@ h1 {
   font-weight: bold;
   color: #0066cc;
 }
+
+#qrcode {
+  margin-top: 20px;
+}
