@@ -11,8 +11,10 @@ document.getElementById('uploadForm').addEventListener('submit', async (event) =
       method: 'POST',
       body: formData
     });
-    const result = await response.json();
 
+    // レスポンスがJSONかどうかを確認
+    const result = await response.json();
+    
     if (result.fileUrl) {
       document.getElementById('result').innerHTML = `共有URL: <a href="${result.fileUrl}" target="_blank">${result.fileUrl}</a>`;
       QRCode.toCanvas(document.getElementById('qrcode'), result.fileUrl, { width: 200 });
