@@ -3,22 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QRコードファイルアップロード</title>
+  <title>ファイル共有QRコード生成</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 </head>
 <body>
-  <h1>ファイルまたは画像をアップロードしてQRコードを生成</h1>
-  
-  <form id="uploadForm" enctype="multipart/form-data">
-    <label for="fileInput">ファイルを選択してください：</label>
-    <input type="file" id="fileInput" name="file">
-    <button type="submit">QRコード生成</button>
+  <h1>ファイル共有QRコード生成</h1>
+  <form id="uploadForm">
+    <input type="file" id="fileInput" required />
+    <button type="submit">ファイルをアップロード</button>
   </form>
-
-  <div id="qrCodeContainer" style="margin-top: 20px;">
-    <p>QRコード：</p>
-    <img id="qrCode" style="display: none;" src="" alt="QRコード">
-    <a id="downloadLink" href="" download>QRコードをダウンロード</a>
-  </div>
+  <div id="result"></div>
+  <div id="qrcode"></div>
 
   <script src="script.js"></script>
 </body>
