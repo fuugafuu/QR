@@ -14,13 +14,13 @@ document.getElementById('fileInput').addEventListener('change', async (event) =>
       ctx.drawImage(img, 0, 0, img.width, img.height);
 
       const imageData = ctx.getImageData(0, 0, img.width, img.height);
-      const code = jsQR(imageData.data, img.width, img.height);
+      const code = jsQR(imageData.data, img.width, img.height, { inversionAttempts: "attemptBoth" });
 
       if (code) {
         document.getElementById('result').innerHTML = `QRコードの内容: <a href="${code.data}" target="_blank">${code.data}</a>`;
-        window.location.href = code.data;  // 自動でダウンロードリンクへ移動
+        window.location.href = code.data;  // 自動でリンクへ移動
       } else {
-        document.getElementById('result').textContent = 'QRコードが認識できませんでした。';
+        document.getElementById('result').textContent = 'QRコードが認識できませんでした。別の画像を試してください。';
       }
     };
   };
