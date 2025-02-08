@@ -1,21 +1,4 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ファイル共有QRコード生成</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
-</head>
-<body>
-  <h1>ファイル共有QRコード生成</h1>
-  <form id="uploadForm">
-    <input type="file" id="fileInput" required />
-    <button type="submit">ファイルをアップロード</button>
-  </form>
-  <div id="result"></div>
-  <div id="qrcode"></div>
-
-  <script src="script.js"></script>
-</body>
-</html>
+<form id="uploadForm" enctype="multipart/form-data">
+  <input type="file" id="fileInput" name="file">
+  <button type="submit">アップロード</button>
+</form>
